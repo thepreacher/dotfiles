@@ -200,3 +200,5 @@
 	signingkey = 3C7E9430
 [gpg]
 	program = /usr/local/bin/gpg
+[credential]
+	helper = cache
