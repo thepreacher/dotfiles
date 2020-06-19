@@ -1,0 +1,161 @@
+#!/usr/bin/env bash
+
+# Browser
+if [[ "$OSTYPE" == darwin* ]]; then
+  export BROWSER="open"
+fi
+
+# Make vim the default editor.
+export EDITOR="vim"
+
+# Enable persistent REPL history for `node`.
+export NODE_REPL_HISTORY=~/.node_history
+# Allow 32³ entries; the default is 1000.
+export NODE_REPL_HISTORY_SIZE="32768"
+# Use sloppy mode by default, matching web browsers.
+export NODE_REPL_MODE="sloppy"
+
+# Make Python use UTF-8 encoding for output to stdin, stdout, and stderr.
+export PYTHONIOENCODING="UTF-8"
+
+# Increase Bash history size. Allow 32³ entries; the default is 500.
+export HISTSIZE="32768"
+export HISTFILESIZE="${HISTSIZE}"
+# Omit duplicates and commands that begin with a space from history.
+export HISTCONTROL="ignoreboth"
+
+# Language
+if [[ -z "$LANG" ]]; then
+  # Prefer GB English and use UTF-8
+  export LC_ALL="en_GB.UTF-8"
+  export LANG="en_GB"
+fi
+
+#
+# Less
+#
+
+# Set the default Less options.
+# Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
+# Remove -X and -F (exit if the content fits on one screen) to enable it.
+export LESS='-F -g -i -M -R -S -w -X -z-4'
+
+# Set the Less input preprocessor.
+# Try both `lesspipe` and `lesspipe.sh` as either might exist on a system.
+if (( $#commands[(i)lesspipe(|.sh)] )); then
+  export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
+fi
+
+
+# Highlight section titles in manual pages.
+export LESS_TERMCAP_md="${yellow}"
+
+# Don’t clear the screen after quitting a manual page.
+export MANPAGER="less -X"
+
+# Avoid issues with `gpg` as installed via Homebrew.
+# https://stackoverflow.com/a/42265848/96656
+export GPG_TTY=$(tty)
+
+# Hide the “default interactive shell is now zsh” warning on macOS.
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+#export ANTIGEN_LOG=${HOME}/.antigen/antigen.log;
+
+# Virtualenv
+export WORKON_HOME=${HOME}/.virtualenvs
+
+# Android Sdk
+export ANDROID_SDK_ROOT=${HOME}/Library/Android/sdk
+export ANDROID_HOME=${HOME}/Library/Android/sdk
+
+# Flutter (Dart SDK)
+export FLUTTER_ROOT=${HOME}/sdks/flutter/bin
+
+# Vim
+export VIMCONFIG=${HOME}/.config/nvim
+export VIMDATA=${HOME}/.local/share/nvim
+export VISUAL=nvim
+
+# Homebrew
+export HOMEBREW_INSTALL_CLEANUP=1
+export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+
+# Grep output color
+export GREP_COLOR="00;38;5;226"
+
+export RUST_SRC_PATH=${HOME}/github/rust
+
+export GOPATH=${HOME}/go
+
+#If set, always use fancy mode when invoking pipenv shell.
+export PIPENV_SHELL_FANCY=1
+
+# fzf
+export FZF_DEFAULT_OPS="--extended"
+export FZF_DEFAULT_COMMAND="fd --type f"
+export FZF_CTRL_T_COMMAND="FZF_DEFAULT_COMMAND"
+export FZ_HISTORY_CD_CMD="_zlua"
+
+# # https://stackoverflow.com/questions/1117398/java-home-directory-in-linux
+# Java Home
+# export JAVA_HOME=$(/usr/libexec/java_home) # This sets java home to default macos version;
+# export JAVA_HOME=$(dirname $(readlink $(which javac)))/java_home # This doesn"t work for asdf;
+#export JDK_HOME=$(asdf where java);
+#export JDK_HOME=${HOME}/.sdkman/candidates/java/current
+#export JAVA_HOME=${JDK_HOME}
+
+# export JAVA_HOME="/Library/Java/JavaVirtualMachines/amazon-corretto-11.jdk/Contents/Home" 
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home"
+
+
+# ### To fix python build issues with zlib and gettext ###########################
+# export PYTHON_CONFIGURE_OPTS="--enable-unicode=ucs2";
+
+# # xcode commandline path
+#CPPFLAGS="${CPPFLAGS} -I$(xcrun --show-sdk-path)/usr/include"
+# update this for every new macOSX version
+#export SDKROOT="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk MACOSX_DEPLOYMENT_TARGET=10.15"
+
+# # zlib
+#LDFLAGS="${LDFLAGS} -L$(brew --prefix zlib)/lib";
+#CPPFLAGS="${CPPFLAGS} -I$(brew --prefix zlib)/include";
+
+# # sqlite
+# LDFLAGS="${LDFLAGS} -L$(brew --prefix sqlite)/lib";
+# CPPFLAGS="${CPPFLAGS} -I$(brew --prefix sqlite)/include";
+
+# # readline
+#LDFLAGS="${LDFLAGS} -L$(brew --prefix readline)/lib";
+#CPPFLAGS="${CPPFLAGS} -I$(brew --prefix readline)/include";
+
+# # openssl
+#LDFLAGS="${LDFLAGS} -L$(brew --prefix openssl)/lib";
+#CPPFLAGS="${CPPFLAGS} -I$(brew --prefix openssl)/include";
+
+# # Gettext
+#LDFLAGS="${LDFLAGS} -L/usr/local/opt/gettext/lib";
+#CPPFLAGS="${CPPFLAGS} -I/usr/local/opt/gettext/include";
+
+# export PKG_CONFIG_PATH="${PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig";
+# export PKG_CONFIG_PATH="${PKG_CONFIG_PATH} /usr/local/opt/sqlite/lib/pkgconfig";
+
+# LLVM3
+#export LDFLAGS;
+#export CPPFLAGS
+
+# Docbook
+export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
+
+# SDK Man
+export SDKMAN_DIR="$HOME/.sdkman"
+
+# Required to enable Python to build dynamic library
+# See: https://github.com/danhper/asdf-python/issues/38 (for macos only)
+export PYTHON_CONFIGURE_OPTS="--enable-framework"
+
+# Volta
+#export VOLTA_HOME="$HOME/.volta"
+
+# Enable IEX Shell History
+export ERL_AFLAGS="-kernel shell_history enabled"

@@ -1,0 +1,73 @@
+# Setup PATH(S)
+
+### These paths are set by default
+### /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:/opt/X11/bin:~/.dotnet/tools
+
+# LLVM
+#PATH=/usr/local/opt/llvm/bin:${PATH}
+
+# SBIN
+PATH=/usr/local/sbin:${PATH}
+PATH=/usr/local/bin:${PATH}
+
+# Nim
+PATH=${HOME}/.nimble/bin:${PATH}
+
+# Rust
+PATH=${HOME}/.cargo/bin:${PATH}
+
+# Golang
+PATH=${GOPATH}/bin:${PATH}
+
+# coreutils
+PATH=/usr/local/opt/coreutils/libexec/gnubin:${PATH}
+
+# findutils
+PATH=/usr/local/opt/findutils/libexec/gnubin:${PATH}
+
+# grep
+PATH=/usr/local/opt/grep/libexec/gnubin:${PATH}
+
+# curl
+PATH=/usr/local/opt/curl/bin:${PATH}
+
+# Gettext
+PATH=/usr/local/opt/gettext/bin:${PATH}
+
+# flutter
+PATH=${PATH}:${HOME}/sdks/flutter/bin
+
+# Postgress app
+PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:${PATH}
+
+# Language and SDK Version Managers
+
+# Luaver Config (installed via git)
+# Update using git:
+# $ cd ~/.luaver && git fetch origin && git reset --hard origin/master
+#[ -s ~/.luaver/luaver ] && . ~/.luaver/luaver
+
+# ASDF Config
+# via homebrew
+. /usr/local/opt/asdf/asdf.sh
+
+# Volta config
+#[ -s "$VOLTA_HOME/load.sh" ] && . "$VOLTA_HOME/load.sh"
+#export PATH="${VOLTA_HOME}/bin:${PATH}"
+
+# Poetry (ala Pipenv)
+#PATH=${HOME}/.poetry/bin:${PATH}
+
+# Doom emacs
+PATH=${HOME}/.emacs.d/bin:${PATH}
+
+# This must always be last so that I can control or customise application startups
+# .local/bin and my bin
+PATH=${HOME}/.local/bin:${PATH}
+PATH=${HOME}/bin:${PATH}
+
+# Export MANPATH
+export MANPATH
+
+# Export PATH
+export PATH

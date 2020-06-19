@@ -1,0 +1,82 @@
+# Load the shell dotfiles, and then some:
+# * ~/.path can be used to extend `$PATH`.
+# * ~/.private can be used for other settings you don’t want to commit.
+for file in ~/.{paths,bash_prompt,exports,baliases,functions,private}; do
+	[ -r "$file" ] && [ -f "$file" ] && source "$file";
+done;
+unset file;
+
+# Case-insensitive globbing (used in pathname expansion)
+shopt -s nocaseglob;
+
+# Append to the Bash history file, rather than overwriting it
+shopt -s histappend;
+
+# Autocorrect typos in path names when using `cd`
+shopt -s cdspell;
+
+# Enable some Bash 4 features when possible:
+# * `autocd`, e.g. `**/qux` will enter `./foo/bar/baz/qux`
+# * Recursive globbing, e.g. `echo **/*.txt`
+for option in autocd globstar; do
+	shopt -s "$option" 2> /dev/null;
+done;
+
+# Add tab completion for many Bash commands
+if which brew &> /dev/null && [ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]; then
+	# Ensure existing Homebrew v1 completions continue to work
+	export BASH_COMPLETION_COMPAT_DIR="$(brew --prefix)/etc/bash_completion.d";
+	source "$(brew --prefix)/etc/profile.d/bash_completion.sh";
+elif [ -f /etc/bash_completion ]; then
+	source /etc/bash_completion;
+fi;
+
+# Enable tab completion for `g` by marking it as an alias for `git`
+if type _git &> /dev/null; then
+	complete -o default -o nospace -F _git g;
+fi;
+
+# Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
+[ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2- | tr ' ' '\n')" scp sftp ssh;
+
+# Add tab completion for `defaults read|write NSGlobalDomain`
+# You could just use `-g` instead, but I like being explicit
+complete -W "NSGlobalDomain" defaults;
+
+# Add `killall` tab completion for common apps
+complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter" killall;
+
+#neofetch
+if [ -v ${PIPENV_ACTIVE} ]; then
+  neofetch
+fi
+
+
+# lua version manager (install via git)
+# Update using git:
+# $ cd ~/.luaver && git fetch origin && git reset --hard origin/master
+#[ -s ~/.luaver/luaver ] && . ~/.luaver/luaver
+#[ -s ~/.luaver/completions/luaver.bash ] && . ~/.luaver/completions/luaver.bash
+
+# flutter completion
+# https://github.com/flutter/flutter/pull/19243
+# generate completion with flutter bash-completion ~/.config/flutter/flutter_completion.sh
+#source "${HOME}/.config/flutter/flutter_completion.sh"
+
+
+# fzf
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+## better `cd`'ing
+##. /usr/local/etc/profile.d/z.sh
+eval "$(lua /Users/nahiable/github/utils/z.lua/z.lua --init bash enhanced once fzf)"
+
+# direnv
+eval "$(direnv hook bash)"
+
+# asdf
+. $(brew --prefix asdf)/asdf.sh
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+#export SDKMAN_DIR="/Users/napo/.sdkman"
+#[[ -s "/Users/napo/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/napo/.sdkman/bin/sdkman-init.sh"
