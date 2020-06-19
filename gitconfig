@@ -87,7 +87,7 @@
 [core]
 
 	# Use custom `.gitignore` and `.gitattributes`
-	excludesfile = /Users/nahiable/.gitignore_global
+	#excludesfile = /Users/nahiable/.gitignore_global
 	attributesfile = ~/.gitattributes
 
 	# Treat spaces before tabs and all kinds of trailing whitespace as an error
@@ -194,7 +194,7 @@
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
-	
+
 [user]
 	email = 219075+thepreacher@users.noreply.github.com
 	signingkey = 3C7E9430
