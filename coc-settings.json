@@ -1,0 +1,4 @@
+{
+  "python.jediEnabled": false,
+  "elixir.pathToElixirLS": "~/code/github/lang_servers/elixir-ls/release/language_server.sh"
+}

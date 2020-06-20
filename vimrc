@@ -3,7 +3,7 @@
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Install packages
-source ~/Code/dotfiles/packages.vim
+source ~/dotfiles/packages.vim
 
 """""""""""""""""""""""""""""
 " Configuration Section
