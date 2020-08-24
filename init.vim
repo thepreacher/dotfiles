@@ -1,6 +1,6 @@
 " Lang Host Progs"
-"let g:python_host_prog = '~/.virtualenvs/neovim-cs5losBB/bin/python'
-let g:python3_host_prog = '~/.virtualenvs/neovim-cs5losBB/bin/python'
+"let g:python_host_prog = '~/.virtualenvs/neovim-py2/.venv/bin/python'
+let g:python3_host_prog = '~/.virtualenvs/neovim-py3/.venv/bin/python'
 let g:node_host_prog = '~/.asdf/shims/neovim-node-host'
 
 " Automatic installation plugin manager if not exist"

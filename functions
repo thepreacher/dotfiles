@@ -181,3 +181,15 @@ function rmvenv() { rm -rf "$WORKON_HOME/$1"; }
 
 # create venv in pwd
 function venv() { python -m venv "$1"; }
+
+# prepend virtual env paths if bpython invoked from a virtual env 
+# makes it possible to use one global bpython install for all virtual envs
+bpython() {
+    if test -n "$VIRTUAL_ENV"
+    then
+        PYTHONPATH="$(python -c 'import sys; print (":".join(sys.path))')" \
+        command bpython "$@"
+    else
+        command bpython "$@"
+    fi
+}

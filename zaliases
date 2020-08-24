@@ -79,6 +79,7 @@ alias update_system='sudo softwareupdate -i -a; brew update; brew upgrade; brew 
 alias brew_update="brew -v update; brew upgrade; pnpm up -g; ncu -g"
 alias brewupd="brew -v update"
 alias brewupg="brew upgrade; pnpm up -g; ncu -g"
+alias upgradepkgs="brew upgrade $(brew outdated --formula -q); pnpm up -g; ncu -g"
 alias brewcu="brew cu -a -y --no-brew-update"
 
 # Google Chrome
