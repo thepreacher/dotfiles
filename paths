@@ -4,7 +4,7 @@
 ### /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:/opt/X11/bin:~/.dotnet/tools
 
 # LLVM
-#PATH=/usr/local/opt/llvm/bin:${PATH}
+PATH=/usr/local/opt/llvm/bin:${PATH}
 
 # SBIN
 PATH=/usr/local/sbin:${PATH}
@@ -50,6 +50,9 @@ PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:${PATH}
 # $ cd ~/.luaver && git fetch origin && git reset --hard origin/master
 #[ -s ~/.luaver/luaver ] && . ~/.luaver/luaver
 
+# Roswell Common Lisp
+#PATH=${HOME}/.roswell/bin:${PATH}
+
 # ASDF Config
 # via homebrew
 . $(brew --prefix asdf)/asdf.sh
@@ -80,15 +83,25 @@ PKG_CONFIG_PATH=/usr/local/opt/sqlite/lib/pkgconfig
 
 
 # Compiler Flags
+
+# Sqlite3
 #LDFLAGS="-L/usr/local/opt/sqlite/lib"
 #CPPFLAGS="-I/usr/local/opt/sqlite/include"
 
+# C-C++
+#==> Caveats
+#To use the bundled libc++ please add the following LDFLAGS:
+#  LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
 
+LDFLAGS="-L/usr/local/opt/llvm/lib"
+CPPFLAGS="-I/usr/local/opt/llvm/include"
 
+LDFLAGS=${LDFLAGS}
+CPPFLAGS=${CPPFLAGS}
 
 # Export Compiler Flags
-#export LDFLAGS
-#export CPPFLAGS
+export LDFLAGS
+export CPPFLAGS
 
 # Export MANPATH
 export MANPATH

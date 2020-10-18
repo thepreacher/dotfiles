@@ -202,3 +202,5 @@
 	program = /usr/local/bin/gpg
 [credential]
 	helper = cache
+[pull]
+	rebase = false

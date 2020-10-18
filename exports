@@ -26,12 +26,15 @@ export HISTFILESIZE="${HISTSIZE}"
 # Omit duplicates and commands that begin with a space from history.
 export HISTCONTROL="ignoreboth"
 
-# Language
+# Locale
 if [[ -z "$LANG" ]]; then
   # Prefer GB English and use UTF-8
   export LC_ALL="en_GB.UTF-8"
   export LANG="en_GB"
 fi
+
+# Use colors for cli
+export CLICOLOR_FORCE=1
 
 #
 # Less
@@ -86,8 +89,10 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 # Grep output color
 export GREP_COLOR="00;38;5;226"
 
+# Rust
 export RUST_SRC_PATH=${HOME}/github/rust
 
+# Golang
 export GOPATH=${HOME}/go
 
 #If set, always use fancy mode when invoking pipenv shell.
@@ -107,7 +112,7 @@ export FZ_HISTORY_CD_CMD="_zlua"
 #export JDK_HOME=${HOME}/.sdkman/candidates/java/current
 #export JAVA_HOME=${JDK_HOME}
 
-# export JAVA_HOME="/Library/Java/JavaVirtualMachines/amazon-corretto-11.jdk/Contents/Home" 
+# export JAVA_HOME="/Library/Java/JavaVirtualMachines/amazon-corretto-11.jdk/Contents/Home"
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home"
 
 
