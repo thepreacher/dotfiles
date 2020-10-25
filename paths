@@ -4,7 +4,7 @@
 ### /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:/opt/X11/bin:~/.dotnet/tools
 
 # LLVM
-PATH=/usr/local/opt/llvm/bin:${PATH}
+#PATH=/usr/local/opt/llvm/bin:${PATH}
 
 # SBIN
 PATH=/usr/local/sbin:${PATH}
@@ -55,7 +55,7 @@ PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:${PATH}
 
 # ASDF Config
 # via homebrew
-. $(brew --prefix asdf)/asdf.sh
+#. $(brew --prefix asdf)/asdf.sh
 
 # Volta config
 #[ -s "$VOLTA_HOME/load.sh" ] && . "$VOLTA_HOME/load.sh"
@@ -66,13 +66,6 @@ PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:${PATH}
 
 # Doom emacs
 PATH=${HOME}/.emacs.d/bin:${PATH}
-
-# This must always be last so that I can control or customise application startups
-# .local/bin and my bin
-PATH=${HOME}/.local/bin:${PATH}
-PATH=${HOME}/bin:${PATH}
-
-
 
 # Setup MANPATH
 
@@ -93,8 +86,8 @@ PKG_CONFIG_PATH=/usr/local/opt/sqlite/lib/pkgconfig
 #To use the bundled libc++ please add the following LDFLAGS:
 #  LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
 
-LDFLAGS="-L/usr/local/opt/llvm/lib"
-CPPFLAGS="-I/usr/local/opt/llvm/include"
+#LDFLAGS="-L/usr/local/opt/llvm/lib"
+#CPPFLAGS="-I/usr/local/opt/llvm/include"
 
 LDFLAGS=${LDFLAGS}
 CPPFLAGS=${CPPFLAGS}

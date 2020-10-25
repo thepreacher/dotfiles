@@ -31,17 +31,121 @@ for file in ~/.{zaliases,functions}; do
 done
 unset file
 
-#neofetch
-if [ -v ${VIRTUAL_ENV} ]; then
-  neofetch
-fi
-
-fpath=(
-  ~/.local/completions $fpath
-)
-
 # Command line keybinding
 bindkey -e
+
+
+############# SETOPT ######################################
+
+# http://zsh.sourceforge.net/Doc/Release/Options-Index.html
+
+# ===== Basics
+# please no beeeeeeps
+setopt NO_BEEP
+# list jobs in the long format by default
+setopt LONG_LIST_JOBS
+# allow comments even in interactive shells
+setopt INTERACTIVECOMMENTS
+# all unquoted arguments of the form identifier=expression appearing after the command name have file expansion
+setopt MAGIC_EQUAL_SUBST
+# append a trailing ‘/’ to all directory names resulting from filename generation
+setopt MARK_DIRS
+
+# do not beeep, please
+unsetopt HIST_BEEP
+# do not freezes output to the terminal until you type ^q `\
+unsetopt FLOWCONTROL
+
+
+# ===== Prompt
+# the prompt string is first subjected to parameter expansion, command substitution and arithmetic expansion
+#setopt PROMPT_SUBST
+# remove any right prompt from display when accepting a command line. This may be useful with terminals with other cut/paste methods
+#setopt TRANSIENT_RPROMPT
+
+
+# ===== Changing Directories
+# Make cd push the old directory onto the directory stack
+setopt AUTO_PUSHD
+# swapped the meaning of cd +1 and cd -1; we want them to mean the opposite of what they mean im csh
+setopt PUSHDMINUS
+# don’t push multiple copies of the same directory onto the directory stack
+setopt PUSHD_IGNORE_DUPS
+# if argument to cd is the name of a parameter whose value is a valid directory, it will become the current directory
+setopt CDABLEVARS
+
+# do not print the directory stack after pushd or popd
+unsetopt PUSHD_SILENT
+# if a command is not in the hash table, and there exists an executable directory by that name, perform the cd command to that directory
+setopt AUTO_CD
+
+
+# ===== Expansion and Globbing
+# when the current word has a glob pattern, do not insert all the words resulting from the expansion but generate matches as for completion and cycle through them
+setopt GLOB_COMPLETE
+# more patterns for filename generation
+setopt EXTENDED_GLOB
+
+
+# ===== History
+# Allow multiple terminal sessions to all append to one zsh command history
+setopt APPEND_HISTORY
+# Save each command’s beginning timestamp (in seconds since the epoch) and the duration (in seconds) to the history file
+setopt EXTENDED_HISTORY
+# Add commands as they are typed, don't wait until shell exit
+setopt INC_APPEND_HISTORY
+# If the internal history needs to be trimmed to add the current command line, setting this option will cause the oldest history event that has a duplicate to be lost before losing a unique event
+setopt HIST_EXPIRE_DUPS_FIRST
+# Do not enter command lines into the history list if they are duplicates of the previous event
+setopt HIST_IGNORE_DUPS
+# remove command lines from the history list when the first character on the line is a space
+setopt HIST_IGNORE_SPACE
+# When searching history don't display results already cycled through twice
+setopt HIST_FIND_NO_DUPS
+# remove the history (fc -l) command from the history list when invoked
+setopt HIST_NO_STORE
+# remove superfluous blanks from each command line being added to the history list
+setopt HIST_REDUCE_BLANKS
+# whenever the user enters a line with history expansion, don’t execute the line directly
+setopt HIST_VERIFY
+
+# this option both imports new commands from the history file, and also causes your typed command
+unsetopt SHARE_HISTORY
+
+
+# ===== Completion
+# show completion menu on successive tab press ... needs unsetop menu_complete to work
+setopt AUTO_MENU
+# automatically list choices on an ambiguous completion
+setopt AUTO_LIST
+# when listing files that are possible completions, show the type of each file with a trailing identifying mark
+setopt LIST_TYPES
+# extra completion
+setopt COMPLETE_ALIASES
+# if unset, the cursor is set to the end of the word if completion is started. Otherwise it stays there and completion is done from both ends
+setopt COMPLETE_IN_WORD
+# if a completion is performed with the cursor within a word, and a full completion is inserted, the cursor is moved to the end of the word
+setopt ALWAYS_TO_END
+
+# do not autoselect the first completion entry
+unsetopt MENU_COMPLETE
+# do not set auto_name_dirs because it messes up prompts (any parameter that is set to the absolute name of a directory immediately becomes a name for that directory)
+unsetopt AUTO_NAME_DIRS
+
+
+# ===== Correction
+# no spelling correction for commands
+unsetopt CORRECT
+# no spelling correction for arguments
+unsetopt CORRECT_ALL
+
+
+# ===== Scripts and Functions
+# # perform implicit tees or cats when multiple redirections are attempted
+setopt MULTIOS
+
+############# END SETOPT ##################################
+
 
 # Two regular plugins loaded without investigating.
 zinit light zsh-users/zsh-autosuggestions
@@ -61,35 +165,86 @@ zinit ice atclone"dircolors -b LS_COLORS > clrs.zsh" \
   atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”'
 zinit light trapd00r/LS_COLORS
 
+
 # Binary release in archive, from GitHub-releases page.
 # After automatic unpacking it provides program "fzf".
-zinit ice from"gh-r" as"program"
+zinit ice from"gh-r" fbin"fzf"
 zinit load junegunn/fzf-bin
 
-# Direnv
+# sharkdp/fd
+zinit ice from"gh-r" mv"fd* -> fd" sbin"fd/fd"
+zinit light sharkdp/fd
+
+# sharkdp/bat
+zinit ice from"gh-r" mv"bat* -> bat" sbin"bat/bat"
+zinit light sharkdp/bat
+
+# direnv
 zinit from"gh-r" as"program" mv"direnv* -> direnv" \
-  atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' \
+  atclone='./direnv hook zsh > zhook.zsh' atpull='%atclone' \
   pick"direnv" src="zhook.zsh" for \
     direnv/direnv
 
+# asdf
+zinit from"gh" as"command" \
+  atclone='ASDF_DIR="$PWD" ' \
+  atinit='export ASDF_DIR="$PWD"' \
+  atpull='%atclone' \
+  atload='. $ASDF_DIR/asdf.sh' \
+  pick'bin/asdf' for \
+    @asdf-vm/asdf
+
 # z.lua
 #eval "$(lua $HOME/github/utils/z.lua/z.lua --init zsh enhanced once fzf)"
-zinit wait lucid id-as=zlua \
-  atclone="lua z.lua --init zsh enhanced once fzf > zlua.gen.zsh" \
-  atpull="%atclone" pick="zlua.gen.zsh" for \
-    skywind3000/z.lua
+if (( $+commands[lua] )) ; then
+  zinit wait"0a" lucid id-as=zlua \
+    atclone='lua z.lua --init zsh enhanced once fzf > zlua.gen.zsh' \
+    atpull="%atclone" pick="zlua.gen.zsh" for \
+      skywind3000/z.lua
+fi
 
 # pipx completion
 #eval "$(register-python-argcomplete pipx)"
 # make this the last turbo mode loading due to the atload command
-zinit wait lucid id-as=pipx \
-  atclone="register-python-argcomplete pipx > pipx.gen.zsh" \
-  atpull="%atclone" pick="pipx.gen.zsh" \
-  atload"zicompinit; zicdreplay" blockf for \
-    zdharma/null
+if (( $+commands[register-python-argcomplete] && $+commands[pipx] )) ; then
+  zinit wait"0b" lucid id-as=pipx \
+    atclone='register-python-argcomplete pipx > pipx.gen.zsh' \
+    atpull="%atclone" pick="pipx.gen.zsh" for \
+      zdharma/null
+fi
 
-# Zsh completions
-#autoload -Uz compinit; compinit
+# File path for completion
+fpath=(
+  ${HOME}/.local/completions
+  ${ASDF_DIR}/completions 
+  $fpath
+)
+
+# zsh completion
+zinit wait"1" lucid atload"zicompinit; zicdreplay" blockf for \
+    zsh-users/zsh-completions
+
+zstyle ':completion:*' completer _expand _complete _ignored _approximate
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zstyle ':completion:*' menu select=2
+zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
+zstyle ':completion:*:descriptions' format '-- %d --'
+zstyle ':completion:*:processes' command 'ps -au$USER'
+zstyle ':completion:complete:*:options' sort false
+zstyle ':fzf-tab:complete:_zlua:*' query-string input
+zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm,cmd -w -w"
 
 # Bash completions
 autoload -Uz bashcompinit; bashcompinit
+
+# This must always be last so that I can control or customise application startups
+# .local/bin and my bin
+PATH=${HOME}/.local/bin:${PATH}
+PATH=${HOME}/bin:${PATH}
+export PATH
+
+#neofetch
+if [ -v ${VIRTUAL_ENV} ]; then
+  neofetch
+fi
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
