@@ -1,0 +1,30 @@
+#!/usr/bin/env zsh
+
+path=(
+  ${HOME}/.nimble/bin   # Nim
+  ${HOME}/.cargo/bin  # Rust
+  ${GOPATH}/bin   # Golang
+  /usr/local/opt/sqlite/bin   # Sqlite3
+  ${HOME}/sdks/flutter/bin  # flutter
+  /usr/local/opt/coreutils/libexec/gnubin   # coreutils
+  /usr/local/opt/findutils/libexec/gnubin   # findutils
+  /usr/local/opt/grep/libexec/gnubin  # grep
+  /usr/local/opt/curl/bin   # curl
+  /usr/local/opt/gettext/bin  # Gettext
+  /Applications/Postgres.app/Contents/Versions/latest/bin   # Postgress app
+  /usr/local/sbin
+  #/usr/local/opt/llvm/bin  # llvm
+  $path
+)
+
+source ${HOME}/.asdf/asdf.sh
+
+path=(
+  ~/bin
+  ~/.local/bin
+  ${HOME}/.emacs.d/bin
+  $path
+)
+
+# Ensure path arrays do not contain duplicates.
+typeset -gU cdpath fpath mailpath path

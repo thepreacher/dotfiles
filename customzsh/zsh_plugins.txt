@@ -1,0 +1,11 @@
+# shell prompt config tool
+romkatv/powerlevel10k
+
+# essential plugins
+zdharma/fast-syntax-highlighting
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-history-substring-search
+zsh-users/zsh-completions
+
+# useful
+djui/alias-tips

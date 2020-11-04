@@ -35,7 +35,6 @@ call plug#begin('~/.vim/plugged')
     \'coc-html',
     \'coc-json',
     \'coc-prettier',
-    \'coc-tsserver',
     \'coc-python',
     \'coc-rls',
     \'coc-git',

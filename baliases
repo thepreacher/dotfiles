@@ -51,6 +51,9 @@ alias ll="ls -lF ${colorflag} | grep --color=never '^d'"
 # Always use color output for `ls`
 alias ls="command ls ${colorflag}"
 
+## Show hidden files ##
+alias l.="ls -dF .*"
+
 # Always enable colored `grep` output
 # Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
 alias grep="grep --color=auto"
@@ -208,4 +211,3 @@ alias zb="z -b" # quickly cd to the parent directory
 alias tar="gtar"
 alias indent="gindent"
 alias getopt="/usr/local/opt/gnu-getopt/bin/getopt"
-

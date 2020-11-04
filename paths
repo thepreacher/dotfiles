@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Setup PATHS
 
 ### These paths are set by default
@@ -6,15 +8,11 @@
 # LLVM
 #PATH=/usr/local/opt/llvm/bin:${PATH}
 
-# SBIN
-PATH=/usr/local/sbin:${PATH}
-PATH=/usr/local/bin:${PATH}
-
 # Nim
 PATH=${HOME}/.nimble/bin:${PATH}
 
 # Rust
-PATH=${HOME}/.cargo/bin:${PATH}
+#PATH=${HOME}/.cargo/bin:${PATH}
 
 # Golang
 PATH=${GOPATH}/bin:${PATH}
@@ -68,33 +66,6 @@ PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:${PATH}
 PATH=${HOME}/.emacs.d/bin:${PATH}
 
 # Setup MANPATH
-
-
-# Setup PKG_CONFIG_PATH
-
-PKG_CONFIG_PATH=/usr/local/opt/sqlite/lib/pkgconfig
-
-
-# Compiler Flags
-
-# Sqlite3
-#LDFLAGS="-L/usr/local/opt/sqlite/lib"
-#CPPFLAGS="-I/usr/local/opt/sqlite/include"
-
-# C-C++
-#==> Caveats
-#To use the bundled libc++ please add the following LDFLAGS:
-#  LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
-
-#LDFLAGS="-L/usr/local/opt/llvm/lib"
-#CPPFLAGS="-I/usr/local/opt/llvm/include"
-
-LDFLAGS=${LDFLAGS}
-CPPFLAGS=${CPPFLAGS}
-
-# Export Compiler Flags
-export LDFLAGS
-export CPPFLAGS
 
 # Export MANPATH
 export MANPATH

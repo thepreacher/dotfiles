@@ -6,6 +6,12 @@ for file in ~/.{paths,bash_prompt,exports,baliases,functions,private}; do
 done;
 unset file;
 
+
+#neofetch
+if [ -v ${VIRTUAL_ENV} ]; then
+  neofetch
+fi
+
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob;
 
@@ -46,12 +52,6 @@ complete -W "NSGlobalDomain" defaults;
 # Add `killall` tab completion for common apps
 complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter" killall;
 
-#neofetch
-if [ -v ${PIPENV_ACTIVE} ]; then
-  neofetch
-fi
-
-
 # lua version manager (install via git)
 # Update using git:
 # $ cd ~/.luaver && git fetch origin && git reset --hard origin/master
@@ -75,8 +75,4 @@ eval "$(lua /Users/nahiable/github/utils/z.lua/z.lua --init bash enhanced once f
 eval "$(direnv hook bash)"
 
 # asdf
-. $(brew --prefix asdf)/asdf.sh
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-#export SDKMAN_DIR="/Users/napo/.sdkman"
-#[[ -s "/Users/napo/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/napo/.sdkman/bin/sdkman-init.sh"
+source ${HOME}/.asdf/asdf.sh
