@@ -1,6 +1,9 @@
 
 ## SMARTER TAB-COMPLETION (Readline bindings) ##
 
+# This line sets readline to display possible completions using different colors to indicate their file types.
+set colored-stats On
+
 # Perform file completion in a case insensitive fashion
 set completion-ignore-case on
 
@@ -38,9 +41,20 @@ set visible-stats on
 set skip-completed-text on
 
 # Allow UTF-8 input and output, instead of showing stuff like $'\0123\0456'
-set input-meta on
-set output-meta on
-set convert-meta off
+#set input-meta on
+#set output-meta on
+#set convert-meta off
 
 # Use Alt/Meta + Delete to delete the preceding word
 "\e[3;3~": kill-word
+
+# Use Ctrl+← and Ctrl+→ (or Alt/Meta, or Esc) to move between words.
+"\e[1;5D": backward-word
+"\e[1;3D": backward-word
+"\e[5D": backward-word
+"\e\e[D": backward-word
+
+"\e[1;5C": forward-word
+"\e[1;3C": forward-word
+"\e[5C": forward-word
+"\e\e[C": forward-word

@@ -1,16 +1,42 @@
 #!/usr/bin/env zsh
 
 # http://zsh.sourceforge.net/Guide/zshguide02.html
-# zmodload zsh/zprof # command time  zsh -i -c exit
+#zmodload zsh/zprof # command time  zsh -i -c exit
 
 if [[ -o login ]]; then
 	# Load the env setting and paths and some:
-	for file in ~/.{zexports,zpaths,zaliases,functions,private}; do
+	for file in ~/dotfiles/zsh/{zexports,zpaths,zprivate}; do
 		[ -r "$file" ] && [ -f "$file" ] && source "$file";
-	done;
+	done
+	unset file
 
 	neofetch # neofetch
 fi
+
+# Load the aliases and custon functions and some:
+for file in ~/dotfiles/zsh/{zaliases,zfunctions}; do
+	[ -r "$file" ] && [ -f "$file" ] && source "$file";
+done
+unset file
+
+################ Completions & corrections
+
+[[ -n $ASDF_DIR ]] && fpath=($ASDF_DIR/completions(-/) $fpath)
+fpath=(~/.local/completions(-/) $fpath)
+
+# initialize zsh completions
+autoload -Uz compinit
+
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
+
+# initializw bash completions
+autoload -Uz bashcompinit; bashcompinit
+
+# antibody
+source ~/dotfiles/antibody/zsh_plugins.sh
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -19,24 +45,21 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# antibody
-source ~/dotfiles/customzsh/zsh_plugins.sh
-
 ################ zsh options
+
 # add color
 autoload colors
 colors
 
-setopt append_history
 setopt extended_history
-#setopt hist_expire_dups_first # expire duplicates first
+setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
 setopt hist_ignore_dups # do not store duplications
 setopt hist_find_no_dups # ignore duplicates when searching
 setopt hist_ignore_space # Remove command lines from the history list when the first character on the line is a space,
 setopt hist_reduce_blanks # removes blank lines from history
 setopt hist_save_no_dups # Don't to save duplicated lines more than once
-#setopt inc_append_history # adds commands as they are typed, not at shell exit
 setopt share_history # share history across multiple zsh sessions
+setopt hist_verify   # show command with history expansion to user before running it
 
 # Changing directories
 setopt auto_cd
@@ -45,58 +68,66 @@ setopt pushd_ignore_dups
 
 # Completion
 setopt auto_list # automatically list choices on ambiguous completion
-setopt auto_menu # automatically use menu completion
 setopt always_to_end # move cursor to end if word had one match
 setopt complete_in_word
 setopt menu_complete
 setopt list_types #  When listing files that are possible completions, show the type of each file with a trailing identifying mark.
 setopt auto_param_keys #  If a parameter name was completed and the next character typed is one of those that have to come directly after the name (like }, :, etc.), they are placed there automatically.
 
-zstyle ':completion:*:*:*:*:*' menu select
-#zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
-# Make completion:
-# (stolen from Wincent)
-# - Try exact (case-sensitive) match first.
-# - Then fall back to case-insensitive.
-# - Accept abbreviations after . or _ or - (ie. f.b -> foo.bar).
-# - Substring complete (ie. bar -> foobar).
+# Zstyles
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' group-name ''
+# Disable particular completions
+zstyle ':completion:*' tag-order '! history-words recent-directories recent-files' '-'
 zstyle ':completion:*' matcher-list '' '+m:{[:lower:]}={[:upper:]}' '+m:{[:upper:]}={[:lower:]}' '+m:{_-}={-_}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 zstyle ':completion::complete:*' use-cache 1
 zstyle ':completion::complete:*' cache-path $ZSH_CACHE_DIR
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
+#zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:*files' ignored-patterns '*?.o' '*?~' '*\#'
-zstyle ':completion:*:cd:*' tag-order local-directories path-directories
-zstyle ':completion:*:cd:*' ignore-parents parent pwd
-zstyle ':completion:*' group-name '' # Categorize completion suggestions with headings:
-zstyle ':completion:*' format %F{yellow}%B%U%{$__DOTS[ITALIC_ON]%}%d%{$__DOTS[ITALIC_OFF]%}%b%u%f # Style the group names
+# disable sort when completing options of any command
+zstyle ':completion:complete:*:options' sort false
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm,cmd -w -w"
+
+# give a preview of directory by tree when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'tree -C -L 2 $realpath'
+# use input as query string when completing zlua
+#zstyle ':fzf-tab:complete:_zlua:*' query-string input
+# give a preview of commandline arguments when completing `kill`
+zstyle ':fzf-tab:complete:kill:argument-rest' extra-opts --preview=$extract'ps --pid=$in[(w)1] -o cmd --no-headers -w -w' --preview-window=down:3:wrap
+zstyle ':fzf-tab:complete:bat:argument-rest' fzf-preview '[[ -f $word ]] && bat --style=numbers --color=always --line-range :200 $word'
+zstyle ':fzf-tab:complete:*' fzf-preview '
+[[ -f $word ]] && bat --style=numbers --color=always --line-range :200 $word ||
+[[ -d $realpath ]] && tree -C -L 2 $realpath ||
+echo $word
+'
+# https://www.reddit.com/r/zsh/comments/gdaxsx/zshautocomplete_intellisenselike_findasyoutype/
+# To make Tab and Shift+Tab cycle completions without using menu selection:
+zstyle ':autocomplete:tab:*' widget-style menu-complete
 
 # Other
 setopt prompt_subst
 setopt auto_param_slash # If a parameter is completed whose content is the name of a directory, then add a trailing slash.
-setopt mark_dirs # Append a trailing / to all directory names resulting from filename generation (globbing).
-setopt correct_all # autocorrect commands
+setopt correct # autocorrect commands
 
 # no beep
 setopt nolistbeep
 setopt nobeep
 
-################ Manpage
-man() {
-    LESS_TERMCAP_md=$'\e[01;31m' \
-    LESS_TERMCAP_me=$'\e[0m' \
-    LESS_TERMCAP_se=$'\e[0m' \
-    LESS_TERMCAP_so=$'\e[01;44;33m' \
-    LESS_TERMCAP_ue=$'\e[0m' \
-    LESS_TERMCAP_us=$'\e[01;32m' \
-    command man "$@"
-}
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 ################ Command line keybinding
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+
+# Bind the fzf-cd-widget to ALT-C
+#
+# This is a workaround because the offical fix is to change ALT-C to
+# send Meta, but we can't do that because we will lose the ability to
+# type a # symbol.
+#
+# The other workaround is use use ESC-C, but we can't use that either
+# because when using Vim keybindings as when ESC is pressed we go
+# out of insert mode.
+#
+# https://github.com/junegunn/fzf/issues/164
+bindkey "ç" fzf-cd-widget
 
 # Emacs binding
 bindkey -e
@@ -135,37 +166,32 @@ bindkey -M emacs '^N' history-substring-search-down
 # bindkey -M vicmd v edit-command-line
 
 ################ Misc.
-# z.lua after source ~/.fzf.zsh
-eval "$(lua ~/Library/Caches/Homebrew/z.lua--git/z.lua --init zsh enhanced once fzf)"
 
-# direnv
-eval "$(direnv hook zsh)"
+# Better cding like z.lua but faster
+eval "$(zoxide init zsh)"
 
-################ Completions & corrections
-[[ -n $ASDF_DIR ]] && fpath=($ASDF_DIR/completions(-/) $fpath)
-fpath=(~/.local/completions(-/) $fpath)
-
-autoload -Uz compinit
-compinit
-
-# Bash completions
-autoload -Uz bashcompinit; bashcompinit
+# direnv hooked into asdf
+eval "$(asdf exec direnv hook zsh)"
 
 # tabtab source for packages
 # uninstall by removing these lines
 [[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
 
 # pipx must be after autoload -Uz bashcompinit; bashcompinit
-eval "$(register-python-argcomplete pipx)"
+# comment this out because already generated completion script
+# with 'register-python-argcomplete pipx > ~/.local/completion/_pipx'
+#eval "$(register-python-argcomplete pipx)"
 
 # thefuck
-eval $(thefuck --alias)
+eval $(thefuck --alias sugar)
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 ################ Java
 # When using asdf-vm, set JAVA_HOME
 [[ -f ~/.asdf/plugins/java/set-java-home.zsh ]] && . ~/.asdf/plugins/java/set-java-home.zsh
 
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 #zprof

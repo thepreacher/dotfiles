@@ -9,9 +9,10 @@ alias ~="cd ~" # `cd` is probably faster to type though
 alias -- -="cd -"
 
 # Shortcuts
-#alias dl="cd ~/Downloads"
+#alias d="cd ~/Documents/Dropbox"
+alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
-alias p="cd ~/projects"
+alias p="cd ~/Code"
 
 # Git aliases
 alias g="git"
@@ -26,74 +27,57 @@ alias gpl="git pull"
 alias gl="git log"
 alias gpo="git push origin $1"
 
-# time to upgrade `ls`
-
 # Detect which `ls` flavor is in use
-if ls --color > /dev/null 2>&1; then # GNU `ls`
+if ls --color >/dev/null 2>&1; then # GNU `ls`
 	colorflag="--color"
-	#export LS_COLORS='no=00:fi=00:di=01;31:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:'
-	export LS_COLORS='fi=00:mi=00:mh=00:ln=01;36:or=01;31:di=01;34:ow=04;01;34:st=34:tw=04;34:pi=01;33:so=01;33:do=01;33:bd=01;33:cd=01;33:su=01;35:sg=01;35:ca=01;35:ex=01;32:no=38;5;248'
+	export LS_COLORS="no=00:fi=00:di=01;31:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:"
+	#eval $(dircolors -b $HOME/.dircolors)
 else # macOS `ls`
 	colorflag="-G"
-	#export LSCOLORS='BxBxhxDxfxhxhxhxhxcxcx'
-	export LSCOLORS=ExGxDxDxCxDxDxFxFxexEx
-
+	export LSCOLORS="BxBxhxDxfxhxhxhxhxcxcx"
+	#export LSCOLORS="ExFxBxDxCxegedabagacad" # for Atom One Dark
 fi
-# Add flags to existing aliases.
-#alias ls='gls -AFh ${colorflag} --group-directories-first'
-#alias ls="${aliases[ls]:-ls} -A"
 
-# # Always use color output for `ls`
+# List all files colorized in long format
+alias l="ls -lF ${colorflag}"
+
+# List all files colorized in long format, including dot files
+alias la="ls -lahF ${colorflag}"
+
+# List only directories
+alias lsd="ls -lF ${colorflag} | grep --color=never '^d'"
+alias ll="ls -lF ${colorflag} | grep --color=never '^d'"
+
+# Always use color output for `ls`
 alias ls="command ls ${colorflag}"
-
-# # List all files colorized in long format, including dot files
-alias la="ls -lahF"
-
-# # List only directories
-alias lsd="ls -lF"
-alias ll="ls -lF"
-alias l="ls -lF"
 
 ## Show hidden files ##
 alias l.="ls -dF .*"
 
 # Always enable colored `grep` output
-alias fgrep="fgrep ${colorflag}"
-alias egrep="egrep ${colorflag}"
-alias grep="grep ${colorflag}"
+# Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
+alias grep="grep --color=auto"
+alias fgrep="fgrep --color=auto"
+alias egrep="egrep --color=auto"
 
 # Enable aliases to be sudo’ed
-alias sudo='sudo '
+alias sudo="sudo "
 
 # Get week number
-alias week='date +%V'
-
-# Pnpm
-alias pnpmupgl='pnpm up -g -l'
-alias pnpmupl='pnpm up -l'
-alias pnpmup='pnpm up'
-alias pnpmupdev='pnpm up --dev'
-alias pnpmlsg='pnpm ls -g --depth 0'
-
-# npm
-alias npmlsg='npm ls -g --depth 0'
-alias npmup='npm install -g npm'
+alias week="date +%V"
 
 # Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
-alias update_system='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; pnpm update -g; sudo gem update --system; sudo gem update; sudo gem cleanup'
+alias update_system="sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update; sudo gem cleanup"
 
 # Update installed Ruby gems, Homebrew, npm, and their installed packages
 #alias brew_update="brew -v update; brew upgrade --force-bottle; brew cleanup; npm-check -gu"
-alias brew_update="brew -v update; brew upgrade; pnpm up -g; ncu -g"
-alias brewupd="brew -v update"
-alias brewupg="brew upgrade --formula; pnpm up -g; ncu -g"
-alias brewupgc="brew upgrade --cask"
-alias brewupgcg="brew upgrade --cask --greedy"
-alias brewcu="brew cu -a -y --no-brew-update"
+alias brew_update="brew -v update; brew upgrade; ncu -g"
+alias brewupdate="brew -v update; brew upgrade; ncu -g"
+alias brewcu="brew cu -a -y"
 
 # Google Chrome
-alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
-alias canary='/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary'
+alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
+alias canary="/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary"
 
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
@@ -147,7 +131,7 @@ alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.ar
 
 # Merge PDF files
 # Usage: `mergepdf -o output.pdf input{1,2,3}.pdf`
-alias mergepdf='/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py'
+alias mergepdf="/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py"
 
 # Disable Spotlight
 alias spotoff="sudo mdutil -a -i off"
@@ -158,7 +142,7 @@ alias spoton="sudo mdutil -a -i on"
 alias plistbuddy="/usr/libexec/PlistBuddy"
 
 # Airport CLI alias
-alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
+alias airport="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
 
 # Intuitive map function
 # For example, to list all directories that contain a certain file:
@@ -167,7 +151,7 @@ alias map="xargs -n1"
 
 # One of @janmoesen’s ProTip™s
 for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
-  alias "${method}"="lwp-request -m '${method}'"
+	alias "${method}"="lwp-request -m '${method}'"
 done
 
 # Make Grunt print stack traces by default
@@ -185,7 +169,7 @@ alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v exten
 alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 
 # Reload the shell (i.e. invoke as a login shell)
-alias reload="exec ${SHELL} -l"
+alias reload='exec ${SHELL} -l'
 
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
@@ -199,12 +183,14 @@ alias mongod="mongod --config /usr/local/etc/mongod.conf"
 alias fs="stat -f \"%z bytes\""
 
 # Shortcuts
+alias v="nvim"
 alias vim="nvim"
 alias ungz="gunzip -k"
 
 # emacs
 alias emd="emacs --daemon" # run emacs as daemon mode with
-#alias ec="emacsclient -cnqua ''" # the void string '' is IMPORTANT
+#alias e="emacsclient -t"
+#alias ec="emacsclient -c"
 
 # asdf
 #alias asdfup="asdf update --head"
@@ -212,30 +198,16 @@ alias emd="emacs --daemon" # run emacs as daemon mode with
 alias asdfplugup="asdf plugin-update --all"
 
 # z.lua
-alias j='z'          # old habbit from autojump
-alias zz='z -c'      # restrict matches to subdirs of $PWD
-#alias zi='z -i'      # cd with interactive selection
-alias zf='z -I'      # use fzf to select in multiple matches
-alias zb='z -b'      # quickly cd to the parent directory
-alias zh='z -I -t .' # jump to history
+alias j="z"     # hold habbit from autojump
+alias zz="z -c" # restrict matches to subdirs of $PWD
+alias zi="z -i" # cd with interactive selection
+alias zf="z -I" # use fzf to select in multiple matches
+alias zb="z -b" # quickly cd to the parent directory
 
-# pipx / pip
+# pipx
 #alias pipx="python -m pipx"
-alias pipuninstallall="pip uninstall -y -r <(pip freeze)"
-alias pipupgradeall="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
 
 # gnu command replacement
 alias tar="gtar"
 alias indent="gindent"
 alias getopt="/usr/local/opt/gnu-getopt/bin/getopt"
-
-# disk usage (find size of folder or disk)
-alias dus="du -sh"
-alias duas="du -ash"
-
-# doom
-alias doomupgrade="doom -y upgrade && doom purge && doom clean && doom sync -u && doom -y compile --core"
-alias doomupgrademadness="doom -y upgrade && doom purge && doom clean && doom sync -u && doom -y compile --core && systemctl --user daemon-reload && systemctl --user restart emacs.service"
-
-# thefuck
-alias sugar="thefuck"

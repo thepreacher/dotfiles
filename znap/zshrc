@@ -1,0 +1,16 @@
+# #!/bin/zsh
+
+# zmodload zsh/zprof
+
+# Znap! The lightweight plugin manager that's easy to grok.
+# Get it from https://github.com/marlonrichert/zsh-snap
+
+source ~/.zsh/zsh-snap/znap.zsh
+
+
+# local mods=( helper completion environment terminal editor history
+#   directory syntax-highlighting zsh-history-substring-search utility )
+# znap source prezto modules/$^mods
+
+# Zstyles
+zstyle ':znap:*' plugins-dir ~/.config/zsh/znap-plugins

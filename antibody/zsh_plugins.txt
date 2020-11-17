@@ -1,0 +1,16 @@
+# shell prompt config tool
+romkatv/powerlevel10k
+
+# essential plugins
+Aloxaf/fzf-tab
+zsh-users/zsh-history-substring-search
+zsh-users/zsh-completions
+marlonrichert/zsh-autocomplete
+zsh-users/zsh-autosuggestions
+
+# useful
+MichaelAquilina/zsh-you-should-use
+
+# source this at the end
+#zdharma/fast-syntax-highlighting
+zsh-users/zsh-syntax-highlighting

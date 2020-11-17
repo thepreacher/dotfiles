@@ -41,6 +41,9 @@ PATH=${PATH}:${HOME}/sdks/flutter/bin
 # Postgress app
 PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:${PATH}
 
+# fzf
+[ -f ${HOME}/.fzf.bash ] && source ${HOME}/.fzf.bash
+
 # Language and SDK Version Managers
 
 # Luaver Config (installed via git)
@@ -52,8 +55,7 @@ PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:${PATH}
 #PATH=${HOME}/.roswell/bin:${PATH}
 
 # ASDF Config
-# via homebrew
-#. $(brew --prefix asdf)/asdf.sh
+. $HOME/.asdf/asdf.sh
 
 # Volta config
 #[ -s "$VOLTA_HOME/load.sh" ] && . "$VOLTA_HOME/load.sh"
@@ -72,6 +74,10 @@ export MANPATH
 
 # Export PGK_CONFIG_PATH
 export PKG_CONFIG_PATH
+
+
+# Ensure path arrays do not contain duplicates.
+PATH=$(echo -n $PATH | awk -v RS=: '!($0 in a) {a[$0]; printf("%s%s", length(a) > 1 ? ":" : "", $0)}')
 
 # Export PATH
 export PATH
