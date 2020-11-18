@@ -183,7 +183,7 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 export PKG_CONFIG_PATH=/usr/local/opt/sqlite/lib/pkgconfig
 
 # For building Erlang with asdf-vm
-export KERL_CONFIGURE_OPTIONS="='--disable-debug --without-javac --with-ssl=$(brew --prefix openssl)"
+export KERL_CONFIGURE_OPTIONS="--disable-debug --without-javac --with-ssl=$(brew --prefix openssl)"
 
 # Compiler flags
 
@@ -199,9 +199,12 @@ export KERL_CONFIGURE_OPTIONS="='--disable-debug --without-javac --with-ssl=$(br
 #LDFLAGS="-L/usr/local/opt/llvm/lib"
 #CPPFLAGS="-I/usr/local/opt/llvm/include"
 
+
 LDFLAGS=${LDFLAGS}
 CPPFLAGS=${CPPFLAGS}
+CFLAGS=${CFLAGS}
 
 # Export Compiler Flags
 export LDFLAGS
 export CPPFLAGS
+export CFLAGS

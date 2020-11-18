@@ -1,6 +1,6 @@
 # use separate file for username / github token / etc
 [include]
-  path = ~/.gitconfig.local
+  path = ~/.gitconfig_local
 [core]
 	autocrlf = false
 	excludesfile = /Users/nahiable/.gitignore_global
@@ -27,3 +27,5 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[credential]
+	helper = osxkeychain

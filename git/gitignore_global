@@ -8,8 +8,14 @@ third_party/WebKit/Source/devtools/front_end/audits2/lighthouse/renderer/report-
 .vim/undo
 
 # git credential file
-.gitconfig.local
+.gitconfig_local
+gitconfig_local
 
+# privite env vars
+.private
+.zprivate
+private
+zprivate
 
 # no thx
 node_modules
@@ -36,3 +42,9 @@ fish/fish_history
 
 # random
 shilocation
+
+# compiled zsh files
+*.zwc
+
+# vscode pytest_cache
+.pytest_cache

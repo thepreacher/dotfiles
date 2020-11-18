@@ -1,16 +1,217 @@
 # #!/bin/zsh
 
-# zmodload zsh/zprof
+# https://github.com/marlonrichert/zsh-snap/issues/3
+# http://zsh.sourceforge.net/Guide/zshguide02.html
+#zmodload zsh/zprof # command time  zsh -i -c exit
+
+if [[ -o login ]]; then
+	# Load the env setting and paths and some:
+	for file in ~/dotfiles/zsh/{zexports,zpaths,zprivate}; do
+		[ -r "$file" ] && [ -f "$file" ] && source "$file";
+	done
+	unset file
+
+	neofetch # neofetch
+fi
+
+################ Completions & corrections
+
+[[ -n $ASDF_DIR ]] && fpath=($ASDF_DIR/completions(-/) $fpath)
+fpath=(~/.local/completions(-/) $fpath)
+
+# initialize zsh completions
+autoload -Uz compinit
+
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
+
+# initializw bash completions
+autoload -Uz bashcompinit; bashcompinit
 
 # Znap! The lightweight plugin manager that's easy to grok.
 # Get it from https://github.com/marlonrichert/zsh-snap
 
 source ~/.zsh/zsh-snap/znap.zsh
 
+# Set znap plugins path
+zstyle ':znap:*' plugins-dir ~/.config/zsh/znap-plugins
 
-# local mods=( helper completion environment terminal editor history
-#   directory syntax-highlighting zsh-history-substring-search utility )
-# znap source prezto modules/$^mods
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+znap source powerlevel10k
+
+znap source fzf-tab
+znap source zsh-history-substring-search
+znap source zsh-completions
+
+# Real-time auto-completion
+# Get it from https://github.com/marlonrichert/zsh-autocomplete
+znap source zsh-autocomplete
+
+# In-line suggestions
+znap source zsh-autosuggestions
+
+znap source zsh-you-should-use
+
+# Load the aliases and custon functions and some:
+for file in ~/dotfiles/zsh/{zaliases,zfunctions}; do
+	[ -r "$file" ] && [ -f "$file" ] && source "$file";
+done
+unset file
+
+
+################ zsh options
+
+# add color
+autoload colors
+colors
+
+setopt extended_history
+setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
+setopt hist_ignore_dups # do not store duplications
+setopt hist_find_no_dups # ignore duplicates when searching
+setopt hist_ignore_space # Remove command lines from the history list when the first character on the line is a space,
+setopt hist_reduce_blanks # removes blank lines from history
+setopt hist_save_no_dups # Don't to save duplicated lines more than once
+setopt share_history # share history across multiple zsh sessions
+setopt hist_verify   # show command with history expansion to user before running it
+
+# Changing directories
+setopt auto_cd
+setopt auto_pushd
+setopt pushd_ignore_dups
+
+# Completion
+setopt auto_list # automatically list choices on ambiguous completion
+setopt always_to_end # move cursor to end if word had one match
+setopt complete_in_word
+setopt menu_complete
+setopt list_types #  When listing files that are possible completions, show the type of each file with a trailing identifying mark.
+setopt auto_param_keys #  If a parameter name was completed and the next character typed is one of those that have to come directly after the name (like }, :, etc.), they are placed there automatically.
 
 # Zstyles
-zstyle ':znap:*' plugins-dir ~/.config/zsh/znap-plugins
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' group-name ''
+# Disable particular completions
+zstyle ':completion:*' tag-order '! history-words recent-directories recent-files' '-'
+zstyle ':completion:*' matcher-list '' '+m:{[:lower:]}={[:upper:]}' '+m:{[:upper:]}={[:lower:]}' '+m:{_-}={-_}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion::complete:*' use-cache 1
+zstyle ':completion::complete:*' cache-path $ZSH_CACHE_DIR
+#zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
+zstyle ':completion:*:*files' ignored-patterns '*?.o' '*?~' '*\#'
+# disable sort when completing options of any command
+zstyle ':completion:complete:*:options' sort false
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm,cmd -w -w"
+
+# give a preview of directory by tree when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'tree -C -L 2 $realpath'
+# use input as query string when completing zlua
+#zstyle ':fzf-tab:complete:_zlua:*' query-string input
+# give a preview of commandline arguments when completing `kill`
+zstyle ':fzf-tab:complete:kill:argument-rest' extra-opts --preview=$extract'ps --pid=$in[(w)1] -o cmd --no-headers -w -w' --preview-window=down:3:wrap
+zstyle ':fzf-tab:complete:bat:argument-rest' fzf-preview '[[ -f $word ]] && bat --style=numbers --color=always --line-range :200 $word'
+zstyle ':fzf-tab:complete:*' fzf-preview '
+[[ -f $word ]] && bat --style=numbers --color=always --line-range :200 $word ||
+[[ -d $realpath ]] && tree -C -L 2 $realpath ||
+echo $word
+'
+# https://www.reddit.com/r/zsh/comments/gdaxsx/zshautocomplete_intellisenselike_findasyoutype/
+# To make Tab and Shift+Tab cycle completions without using menu selection:
+zstyle ':autocomplete:tab:*' widget-style menu-complete
+
+# Other
+setopt prompt_subst
+setopt auto_param_slash # If a parameter is completed whose content is the name of a directory, then add a trailing slash.
+setopt correct # autocorrect commands
+
+# no beep
+setopt nolistbeep
+setopt nobeep
+
+################ Command line keybinding
+
+# Bind the fzf-cd-widget to ALT-C
+#
+# This is a workaround because the offical fix is to change ALT-C to
+# send Meta, but we can't do that because we will lose the ability to
+# type a # symbol.
+#
+# The other workaround is use use ESC-C, but we can't use that either
+# because when using Vim keybindings as when ESC is pressed we go
+# out of insert mode.
+#
+
+# Emacs binding
+bindkey -e
+
+# bind the Control-P/N keys for use in EMACS mode
+bindkey -M emacs '^P' history-substring-search-up
+bindkey -M emacs '^N' history-substring-search-down
+
+# # Vi with some Emacs flavor control keys.
+# bindkey -v
+# export KEYTIMEOUT=1
+
+# bindkey "^A" beginning-of-line
+# bindkey "^E" end-of-line
+# bindkey "^K" kill-line
+# bindkey "^L" clear-screen
+# bindkey "^R" history-incremental-search-backward
+# bindkey "^U" kill-whole-line
+# bindkey "^W" backward-kill-word
+# bindkey "^Y" yank
+
+# # Use vim keys in tab complete menu
+# bindkey -M menuselect 'h' vi-backward-char
+# bindkey -M menuselect 'j' vi-down-line-or-history
+# bindkey -M menuselect 'k' vi-up-line-or-history
+# bindkey -M menuselect 'l' vi-forward-char
+# bindkey -v '^?' backward-delete-char
+
+# # bind the k and j keys for use in VI mode
+# bindkey -M vicmd 'k' history-substring-search-up
+# bindkey -M vicmd 'j' history-substring-search-down
+
+# # 'v' in visual mode opens VIM to edit the command in a full editor.
+# autoload -U edit-command-line
+# zle -N edit-command-line
+# bindkey -M vicmd v edit-command-line
+
+# Command-line syntax highlighting
+znap source zsh-syntax-highlighting
+# znap source fast-syntax-highlighting
+
+################ Misc.
+
+# Better cding like z.lua but faster
+znap eval zoxide 'zoxide init zsh'
+
+# direnv hooked into asdf
+znap eval asdf-direnv 'asdf exec direnv hook zsh'
+
+# tabtab source for packages
+# uninstall by removing these lines
+[[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
+
+# pipx must be after autoload -Uz bashcompinit; bashcompinit
+# comment this out because already generated completion script
+# with 'register-python-argcomplete pipx > ~/.local/completion/_pipx'
+#eval "$(register-python-argcomplete pipx)"
+
+# thefuck
+znap eval thefuck 'thefuck --alias sugar'
+
+# fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+################ Java
+# When using asdf-vm, set JAVA_HOME
+[[ -f ~/.asdf/plugins/java/set-java-home.zsh ]] && . ~/.asdf/plugins/java/set-java-home.zsh
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+#zprof

@@ -126,8 +126,6 @@ setopt nobeep
 # because when using Vim keybindings as when ESC is pressed we go
 # out of insert mode.
 #
-# https://github.com/junegunn/fzf/issues/164
-bindkey "ç" fzf-cd-widget
 
 # Emacs binding
 bindkey -e
