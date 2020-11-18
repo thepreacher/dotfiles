@@ -4,7 +4,7 @@
 [core]
 	autocrlf = false
 	excludesfile = /Users/nahiable/.gitignore_global
-	editor = vim --wait
+	editor = vim
 [color]
 	ui = always
 [push]
