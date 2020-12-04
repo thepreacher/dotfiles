@@ -3,7 +3,7 @@
   path = ~/.gitconfig_local
 [core]
 	autocrlf = false
-	excludesfile = /Users/nahiable/.gitignore_global
+	excludesfile = ~/.gitignore_global
 	editor = vim
 [color]
 	ui = always

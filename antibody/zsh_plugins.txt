@@ -5,8 +5,8 @@ romkatv/powerlevel10k
 Aloxaf/fzf-tab
 zsh-users/zsh-history-substring-search
 zsh-users/zsh-completions
-marlonrichert/zsh-autocomplete
 zsh-users/zsh-autosuggestions
+marlonrichert/zsh-autocomplete
 
 # useful
 MichaelAquilina/zsh-you-should-use
