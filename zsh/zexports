@@ -3,13 +3,18 @@
 # export default brew env settings
 eval "$(brew shellenv)"
 
+# XDG Base Directories
+export XDG_CACHE_HOME=${HOME}/.cache
+export XDG_CONFIG_HOME=${HOME}/.config
+export XDG_DATA_HOME=${HOME}/.local/share
+
 # https://kevinjalbert.com/more-shell-history/
 # zsh history file location
 export HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
 
 # Increase Bash Zsh history size. Allow 32³ entries; the default is 500.
 export HISTSIZE='32768'
-export SAVEHIST="${HISTSIZE}"
+export SAVEHIST=${HISTSIZE}
 
 # Locale
 if [[ -z "$LANG" ]]; then
@@ -29,7 +34,7 @@ export EDITOR='vim'
 # Enable persistent REPL history for `node`.
 export NODE_REPL_HISTORY=~/.node_history
 # Allow 32³ entries; the default is 1000.
-export NODE_REPL_HISTORY_SIZE="${HISTSIZE}"
+export NODE_REPL_HISTORY_SIZE=${HISTSIZE}
 # Use sloppy mode by default, matching web browsers.
 export NODE_REPL_MODE='sloppy'
 # Node path (to appease ncu-check)

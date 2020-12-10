@@ -43,33 +43,54 @@ unset file
 
 
 ################ zsh options
+## https://linux.die.net/man/1/zshoptions
 
-# add color
-autoload colors
-colors
+# Expansion and Globbing
+setopt numericglobsort 	# Sort filenames numerically when it makes sense
+setopt nocaseglob # Make globbing (filename generation) insensitive to case
+setopt extendedglob # Treat the '#', '~' and '^' characters as part of patterns for filename generation
+setopt globdots	# Do not require a leading '.' in a filename to be matched explicitly
+setopt globstarshort # Enable shorter patterns for recursive globbing
+setopt nullglob # Delete unmatched filename pattern from list instead of reporting an error
 
+# Input/Output
+setopt rcquotes 	# Allow the character sequence '''' to signify a single quote within singly quoted strings.
+setopt interactivecomments 	# allow comments, even in interactive shells
+setopt noflowcontrol 	# disable start (C-s) and stop (C-q) characters
+setopt correct	# command auto-correction
+setopt correctall	# argument auto-correction
+
+# History
 setopt extended_history
-setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
-setopt hist_ignore_dups # do not store duplications
-setopt hist_find_no_dups # ignore duplicates when searching
-setopt hist_ignore_space # Remove command lines from the history list when the first character on the line is a space,
-setopt hist_reduce_blanks # removes blank lines from history
-setopt hist_save_no_dups # Don't to save duplicated lines more than once
-setopt share_history # share history across multiple zsh sessions
-setopt hist_verify   # show command with history expansion to user before running it
+setopt hist_expire_dups_first 	# delete duplicates first when HISTFILE size exceeds HISTSIZE
+setopt hist_ignore_dups 	# do not store duplications
+setopt hist_find_no_dups 	# ignore duplicates when searching
+setopt hist_ignore_space 	# Remove command lines from the history list when the first character on the line is a space,
+setopt hist_reduce_blanks 	# removes blank lines from history
+setopt hist_save_no_dups 	# Don't to save duplicated lines more than once
+setopt share_history 	# share history across multiple zsh sessions
+setopt hist_verify	# show command with history expansion to user before running it
 
 # Changing directories
-setopt auto_cd
-setopt auto_pushd
-setopt pushd_ignore_dups
+setopt auto_cd 	# If a command is issued that can't be executed as a normal command, and the command is the name of a directory, perform the cd command to that directory.
+setopt auto_pushd 	# Make cd push the old directory onto the directory stack.
+setopt pushd_ignore_dups # Don't push multiple copies of the same directory onto the directory stack.
 
 # Completion
-setopt auto_list # automatically list choices on ambiguous completion
-setopt always_to_end # move cursor to end if word had one match
-setopt complete_in_word
-setopt menu_complete
-setopt list_types #  When listing files that are possible completions, show the type of each file with a trailing identifying mark.
-setopt auto_param_keys #  If a parameter name was completed and the next character typed is one of those that have to come directly after the name (like }, :, etc.), they are placed there automatically.
+setopt auto_list 	# automatically list choices on ambiguous completion
+setopt always_to_end 	# move cursor to end if word had one match
+setopt complete_in_word # Complete from both ends of word instead of from end only
+setopt menu_complete # On an ambiguous completion, instead of listing possibilities or beeping, insert the first match immediately.
+setopt list_types 	# When listing files that are possible completions, show the type of each file with a trailing identifying mark.
+setopt auto_param_keys 	# If a parameter name was completed and the next character typed is one of those that have to come directly after the name (like }, :, etc.), they are placed there automatically.
+setopt auto_param_slash 	# If a parameter is completed whose content is the name of a directory, then add a trailing slash.
+setopt nolistbeep # Don't beep on an ambiguous completion.
+
+# Prompt
+setopt prompt_subst
+
+# Zle
+setopt nobeep # Don't beep on error in ZLE.
 
 # Zstyles
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
@@ -80,14 +101,8 @@ zstyle ':completion:*:warnings' format 'No matches for: %d'
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
 zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm,cmd -w -w"
 
-# Other
-setopt prompt_subst
-setopt auto_param_slash # If a parameter is completed whose content is the name of a directory, then add a trailing slash.
-setopt correct # autocorrect commands
+#zstyle ':autocomplete:tab:*' fzf-completion yes
 
-# no beep
-setopt nolistbeep
-setopt nobeep
 
 ################ Command line keybinding
 
@@ -133,6 +148,11 @@ bindkey -e
 # autoload -U edit-command-line
 # zle -N edit-command-line
 # bindkey -M vicmd v edit-command-line
+
+# Enable alt-h help function.
+unalias run-help
+autoload -Uz  run-help    run-help-git  run-help-ip   run-help-openssl \
+              run-help-p4 run-help-sudo run-help-svk  run-help-svn
 
 # Command-line syntax highlighting
 znap source zsh-syntax-highlighting
@@ -186,6 +206,12 @@ compinit -C
 
 # initializw bash completions
 autoload -U +X bashcompinit; bashcompinit
+
+# Add path to Elixir language server binaries
+path=(
+	$path
+	${HOME}/lang-servers/elixir-ls/release
+)
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

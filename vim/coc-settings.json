@@ -1,6 +1,6 @@
 {
     "python.jediEnabled": false,
-    "elixir.pathToElixirLS": "~/lang_servers/elixir-ls/release/language_server.sh",
+    "elixir.pathToElixirLS": "~/lang-servers/elixir-ls/release/language_server.sh",
     "languageserver": {
         "elmLS": {
             "command": "elm-language-server",

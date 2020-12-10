@@ -8,6 +8,9 @@ alias .....="cd ../../../.."
 alias ~="cd ~" # `cd` is probably faster to type though
 alias -- -="cd -"
 
+# Help command allows using "help export" eg to get help on built in commands
+alias help='run-help'
+
 # Shortcuts
 #alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
@@ -62,15 +65,11 @@ alias fgrep="fgrep ${colorflag}"
 alias egrep="egrep ${colorflag}"
 alias grep="grep ${colorflag}"
 
-# Enable aliases to be sudo’ed
-alias sudo='sudo '
-
 # Get week number
 alias week='date +%V'
 
 # Pnpm
-alias pnpmupgl='pnpm up -g -l'
-alias pnpmupl='pnpm up -l'
+alias pnpmupg='pnpm up -g'
 alias pnpmup='pnpm up'
 alias pnpmupdev='pnpm up --dev'
 alias pnpmlsg='pnpm ls -g --depth 0'

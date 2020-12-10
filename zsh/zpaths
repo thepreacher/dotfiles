@@ -21,7 +21,7 @@ source ${HOME}/.asdf/asdf.sh
 path=(
   ~/bin
   ~/.local/bin
-  ${HOME}/.emacs.d/bin
+  ${XDG_CONFIG_HOME}/emacs/bin
   $path
 )
 

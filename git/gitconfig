@@ -1,6 +1,6 @@
 # use separate file for username / github token / etc
 [include]
-  path = ~/.gitconfig_local
+  path = ~/dotfiles/git/gitconfig_local
 [core]
 	autocrlf = false
 	excludesfile = ~/.gitignore_global
@@ -29,3 +29,6 @@
 	required = true
 [credential]
 	helper = osxkeychain
+[user]
+	name = Napoleon Ahiable
+	email = 219075+thepreacher@users.noreply.github.com
