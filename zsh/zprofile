@@ -1,0 +1,15 @@
+# Load the envsetting and paths and some:
+for file in ~/dotfiles/zsh/{zexports,zpaths,zprivate}; do
+	[ -r "$file" ] && [ -f "$file" ] && source "$file";
+done
+unset file
+
+# Set the list of directories that cd searches.
+# cdpath=(
+#   $cdpath
+# )
+
+# Set the list of directories that Zsh searches for programs.
+path=(
+  $path
+)

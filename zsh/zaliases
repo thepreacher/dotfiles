@@ -15,6 +15,7 @@ alias help='run-help'
 #alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias p="cd ~/projects"
+alias cfg="cd ~/.config"
 
 # Git aliases
 alias g="git"

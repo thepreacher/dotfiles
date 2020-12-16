@@ -5,11 +5,12 @@
 #zmodload zsh/zprof # command time  zsh -i -c exit
 
 if [[ -o login ]]; then
-	# Load the env setting and paths and some:
-	for file in ~/dotfiles/zsh/{zexports,zpaths,zprivate}; do
-		[ -r "$file" ] && [ -f "$file" ] && source "$file";
-	done
-	unset file
+	path=(
+	  ~/bin
+	  ~/.local/bin
+	  ${XDG_CONFIG_HOME}/emacs/bin
+	  $path
+	)
 
 	neofetch # neofetch
 fi
