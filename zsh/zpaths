@@ -13,17 +13,29 @@ path=(
   /usr/local/opt/gettext/bin  # Gettext
   /Applications/Postgres.app/Contents/Versions/latest/bin   # Postgress app
   #/usr/local/opt/llvm/bin  # llvm
+  ${HOME}/lang-servers/elixir-ls/release # Elixir language server binaries
+  /usr/local/sbin
   $path
 )
 
+# fzf nvim
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Haskell ghcup-env
+[ -f ~/.ghcup/env ] && source ~/.ghcup/env
+
+# Asdf-vm
 source ${HOME}/.asdf/asdf.sh
+# This had to be here to ensure that the global asdf python is set as default
+export PIPENV_DEFAULT_PYTHON_VERSION="$(which python)"
 
 path=(
   ~/bin
   ~/.local/bin
-  ${XDG_CONFIG_HOME}/emacs/bin
+  # ${XDG_CONFIG_HOME}/emacs/bin # Required for doom emacs
   $path
 )
+
 
 # Ensure path arrays do not contain duplicates.
 typeset -gU cdpath fpath mailpath path

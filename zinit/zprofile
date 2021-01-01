@@ -1,3 +1,4 @@
+#!/usr/bin/env zsh
 
 # Load the envsetting and paths and some:
 for file in ~/.{exports,paths,private}; do

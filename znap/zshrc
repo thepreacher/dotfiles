@@ -1,23 +1,22 @@
-# #!/bin/zsh
+#!/usr/bin/env zsh
 
 # https://github.com/marlonrichert/zsh-snap/issues/3
 # http://zsh.sourceforge.net/Guide/zshguide02.html
 #zmodload zsh/zprof # command time  zsh -i -c exit
 
 if [[ -o login ]]; then
-	path=(
-	  ~/bin
-	  ~/.local/bin
-	  ${XDG_CONFIG_HOME}/emacs/bin
-	  $path
-	)
+	# path=(
+	#   ~/bin
+	#   ~/.local/bin
+	#   ${XDG_CONFIG_HOME}/emacs/bin
+	#   $path
+	# )
 
 	neofetch # neofetch
 fi
 
 # Znap! The lightweight plugin manager that's easy to grok.
 # Get it from https://github.com/marlonrichert/zsh-snap
-
 source ~/.zsh/zsh-snap/znap.zsh
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -26,7 +25,7 @@ source ~/.zsh/zsh-snap/znap.zsh
 znap source powerlevel10k
 
 #znap source fzf-tab
-znap source zsh-completions
+#znap source zsh-completions
 
 # In-line suggestions
 znap source zsh-autosuggestions
@@ -59,7 +58,7 @@ setopt rcquotes 	# Allow the character sequence '''' to signify a single quote w
 setopt interactivecomments 	# allow comments, even in interactive shells
 setopt noflowcontrol 	# disable start (C-s) and stop (C-q) characters
 setopt correct	# command auto-correction
-setopt correctall	# argument auto-correction
+#setopt correctall	# argument auto-correction
 
 # History
 setopt extended_history
@@ -102,7 +101,11 @@ zstyle ':completion:*:warnings' format 'No matches for: %d'
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
 zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm,cmd -w -w"
 
-#zstyle ':autocomplete:tab:*' fzf-completion yes
+zstyle ':autocomplete:*' min-delay .5 # Wait for a minimum amount of time
+#zstyle ':autocomplete:*' min-input 3 # Wait for a minimum amount of input
+#zstyle ':autocomplete:*' ignored-input '..##' # Ignore certain inputs eg. don't trigger autocom when word consist solely of ..
+zstyle ':autocomplete:tab:*' widget-style menu-select # Do menu selection:
+#zstyle ':autocomplete:tab:*' fzf-completion yes # try Fzf's completion before using Zsh's
 
 
 ################ Command line keybinding
@@ -162,12 +165,12 @@ znap source zsh-syntax-highlighting
 ################ Misc.
 
 # Better cding like z.lua but faster
-#znap eval zoxide 'zoxide init zsh'
+znap eval zoxide 'zoxide init zsh'
 
-znap eval zlua 'lua ~/github/utils/z.lua/z.lua --init zsh enhanced once fzf'
+#znap eval zlua 'lua ~/github/utils/z.lua/z.lua --init zsh enhanced once fzf'
 
 # direnv hooked into asdf
-znap eval asdf-direnv 'asdf exec direnv hook zsh'
+znap eval asdf-direnv "asdf exec $(asdf which direnv) hook zsh"
 
 ################ Completions & corrections
 
@@ -190,8 +193,6 @@ fpath=(
 # thefuck
 znap eval thefuck 'thefuck --alias sugar'
 
-# fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 ################ Java
 # When using asdf-vm, set JAVA_HOME
@@ -207,12 +208,6 @@ compinit -C
 
 # initializw bash completions
 autoload -U +X bashcompinit; bashcompinit
-
-# Add path to Elixir language server binaries
-path=(
-	$path
-	${HOME}/lang-servers/elixir-ls/release
-)
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

@@ -16,6 +16,9 @@ alias help='run-help'
 alias dt="cd ~/Desktop"
 alias p="cd ~/projects"
 alias cfg="cd ~/.config"
+alias cfge="cd ~/.config/emacs"
+alias venvs="cd ~/.virtualenvs"
+
 
 # Git aliases
 alias g="git"
@@ -193,6 +196,9 @@ alias path='echo -e ${PATH//:/\\n}'
 # splash (scrapinghub's)
 alias splash="docker run -it -p 8050:8050 scrapinghub/splash"
 
+# elm
+alias elm-update-registry='elm diff elm/core 1.0.0 1.0.1 > /dev/null'
+
 # mongodb
 alias mongod="mongod --config /usr/local/etc/mongod.conf"
 # File size
@@ -234,5 +240,5 @@ alias dus="du -sh"
 alias duas="du -ash"
 
 # doom
-alias doomupgrade="doom -y upgrade && doom purge && doom clean && doom sync -u && doom -y compile --core"
-alias doomupgrademadness="doom -y upgrade && doom purge && doom clean && doom sync -u && doom -y compile --core && systemctl --user daemon-reload && systemctl --user restart emacs.service"
+#alias doomupgrade="doom -y upgrade && doom purge && doom clean && doom sync -u && doom -y compile --core"
+#alias doomupgrademadness="doom -y upgrade && doom purge && doom clean && doom sync -u && doom -y compile --core && systemctl --user daemon-reload && systemctl --user restart emacs.service"
