@@ -32,3 +32,5 @@
 [user]
 	name = Napoleon Ahiable
 	email = 219075+thepreacher@users.noreply.github.com
+[init]
+	defaultBranch = main

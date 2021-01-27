@@ -5,20 +5,18 @@ export HOMEBREW_PREFIX="/usr/local";
 export HOMEBREW_CELLAR="/usr/local/Cellar";
 export HOMEBREW_REPOSITORY="/usr/local/Homebrew";
 
-# XDG Base Directories
-export XDG_CACHE_HOME=${HOME}/.cache
-export XDG_CONFIG_HOME=${HOME}/.config
-export XDG_DATA_HOME=${HOME}/.local/share
+# Other XDG Directories
 export XDG_BIN_HOME=${HOME}/.local/bin
 export XDG_LIB_HOME=${HOME}/.local/lib
 
 # https://kevinjalbert.com/more-shell-history/
 # zsh history file location
-export HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
+export HISTFILE=${ZDOTDIR}/.zsh_history
 
-# Increase Bash Zsh history size. Allow 32³ entries; the default is 500.
-export HISTSIZE='32768'
-export SAVEHIST=${HISTSIZE}
+# Make history a bit bigger than macOS default.
+SAVEHIST=2000
+export HISTSIZE=$(( 1.2 * SAVEHIST))  # Zsh recommended value
+
 
 # Locale
 if [[ -z "$LANG" ]]; then

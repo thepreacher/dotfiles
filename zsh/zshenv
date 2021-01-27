@@ -1,7 +1,14 @@
 #!/usr/bin/env zsh
 
+# XDG Base Directories
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$XDG_CONFIG_HOME/local/share"
+export XDG_CACHE_HOME="$XDG_CONFIG_HOME/cache"
+
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+
 # Ensure that a non-login, non-interactive shell has a defined environment.
-if [[ ( "$SHLVL" -eq 1 && ! -o LOGIN ) && -s "${ZDOTDIR:-$HOME}/dotfiles/zsh/zprofile" ]]; then
+if [[ ( "$SHLVL" -eq 1 && ! -o LOGIN ) && -s "$ZDOTDIR/.zprofile" ]]; then
   source /etc/zprofile
-  source "${ZDOTDIR:-$HOME}/dotfiles/zsh/zprofile"
+  source "$ZDOTDIR/.zprofile"
 fi

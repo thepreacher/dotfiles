@@ -17,23 +17,32 @@ fi
 
 # Znap! The lightweight plugin manager that's easy to grok.
 # Get it from https://github.com/marlonrichert/zsh-snap
-source ~/.zsh/zsh-snap/znap.zsh
+source ~/zsh/zsh-snap/znap.zsh
+
+# Znap makes your prompt appear instantly & you can start typing right away.
+# znap prompt sindresorhus/pure
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 znap source powerlevel10k
 
-#znap source fzf-tab
-#znap source zsh-completions
+
+# Real-time auto-completion
+# https://github.com/marlonrichert/zsh-autocomplete
+znap source zsh-autocomplete
 
 # In-line suggestions
 znap source zsh-autosuggestions
 
-# Get it from https://github.com/marlonrichert/zsh-autocomplete
-znap source zsh-autocomplete
-
+# Reminds you that you should use one of your existing aliases for a command you just typed
+# https://github.com/MichaelAquilina/zsh-you-should-use
 znap source zsh-you-should-use
+
+# Better line editing tools
+# https://github.com/marlonrichert/zsh-edit
+znap source zsh-edit
+WORDCHARS='*?\'
 
 # Load the aliases and custon functions and some:
 for file in ~/dotfiles/zsh/{zaliases,zfunctions}; do
@@ -93,6 +102,7 @@ setopt prompt_subst
 setopt nobeep # Don't beep on error in ZLE.
 
 # Zstyles
+zstyle ':autocomplete:tab:*' insert-unambiguous yes # Make Tab first insert any common substring, before inserting full completions
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:descriptions' format 'completing %d:'
@@ -101,7 +111,7 @@ zstyle ':completion:*:warnings' format 'No matches for: %d'
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
 zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm,cmd -w -w"
 
-zstyle ':autocomplete:*' min-delay .5 # Wait for a minimum amount of time
+zstyle ':autocomplete:*' min-delay .3 # Wait for a minimum amount of time
 #zstyle ':autocomplete:*' min-input 3 # Wait for a minimum amount of input
 #zstyle ':autocomplete:*' ignored-input '..##' # Ignore certain inputs eg. don't trigger autocom when word consist solely of ..
 zstyle ':autocomplete:tab:*' widget-style menu-select # Do menu selection:
@@ -158,9 +168,6 @@ unalias run-help
 autoload -Uz  run-help    run-help-git  run-help-ip   run-help-openssl \
               run-help-p4 run-help-sudo run-help-svk  run-help-svn
 
-# Command-line syntax highlighting
-znap source zsh-syntax-highlighting
-# znap source fast-syntax-highlighting
 
 ################ Misc.
 
@@ -181,9 +188,6 @@ fpath=(
 	$fpath
 )
 
-# tabtab source for packages
-# uninstall by removing these lines
-[[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
 
 # pipx must be after autoload -Uz bashcompinit; bashcompinit
 # comment this out because already generated completion script
@@ -194,14 +198,10 @@ fpath=(
 znap eval thefuck 'thefuck --alias sugar'
 
 
-################ Java
-# When using asdf-vm, set JAVA_HOME
-[[ -f ~/.asdf/plugins/java/set-java-home.zsh ]] && . ~/.asdf/plugins/java/set-java-home.zsh
-
 # initialize zsh completions
 autoload -Uz compinit
 
-for dump in ~/.zcompdump(N.mh+24); do
+for dump in "$ZDOTDIR/.zcompdump"(N.mh+24); do
   compinit
 done
 compinit -C
@@ -210,6 +210,16 @@ compinit -C
 autoload -U +X bashcompinit; bashcompinit
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+
+# Command-line syntax highlighting
+export ZSH_HIGHLIGHT_HIGHLIGHTERS=( main brackets )
+znap source zsh-syntax-highlighting
+# znap source fast-syntax-highlighting
+
+
+# PS4='%? %e %N %x %I %_ '
+# setopt verbose xtrace
+
 
 #zprof

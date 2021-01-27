@@ -11,6 +11,7 @@ path=(
   /usr/local/opt/grep/libexec/gnubin  # grep
   /usr/local/opt/curl/bin   # curl
   /usr/local/opt/gettext/bin  # Gettext
+  /usr/local/opt/ncurses/bin # ncurses
   /Applications/Postgres.app/Contents/Versions/latest/bin   # Postgress app
   #/usr/local/opt/llvm/bin  # llvm
   ${HOME}/lang-servers/elixir-ls/release # Elixir language server binaries
@@ -28,6 +29,11 @@ path=(
 source ${HOME}/.asdf/asdf.sh
 # This had to be here to ensure that the global asdf python is set as default
 export PIPENV_DEFAULT_PYTHON_VERSION="$(which python)"
+
+################ Java
+# When using asdf-vm, set JAVA_HOME
+[[ -f ~/.asdf/plugins/java/set-java-home.zsh ]] && . ~/.asdf/plugins/java/set-java-home.zsh
+#/Users/nahiable/.asdf/installs/java/corretto-11.0.9.11.1/bin/java
 
 path=(
   ~/bin
